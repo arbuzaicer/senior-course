@@ -1,3 +1,4 @@
 import "./module";
+import "./scss/index.scss";
 
-console.log("Webpack testing work!");
+console.log("Webpack testing work!!!");
