@@ -1,3 +1,26 @@
+@import "~normalize.css";
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap");
+
+@import "./modules/formula";
+@import "./modules/header";
+@import "./modules/table";
+@import "./modules/toolbar";
+@import "modules/dashboard";
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
-  background-color: blue;
+  font-family: "Roboto Thin", sans-serif;
+  font-size: 12px;
+}
+
+.excel {
+  position: relative;
+  height: 100%;
+  max-width: 100%;
+  font-size: 0.8rem;
 }

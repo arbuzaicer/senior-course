@@ -4,13 +4,10 @@ const HTMLWebpackPlugin = require("html-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
-// выбор режима сборки - устанавливается пакетом cross-env в package.json - настройка скриптов для start / build
-
 const isProd = process.env.NODE_ENV === "production";
-const isDev = process.env.NODE_ENV === "development";
+const isDev = !isProd;
 
-const setFilename = (extension) =>
-  isDev ? `bundle.${extension}` : `bundle.[hash].${extension}`;
+const filename = (ext) => isDev ? `bundle.${ext}` : `bundle.[hash].${ext}`;
 
 const jsLoaders = () => {
   const loaders = [
@@ -34,8 +31,7 @@ module.exports = {
   mode: "development",
   entry: ["@babel/polyfill", "./index.js"],
   output: {
-    filename: setFilename("js"),
-    // добавление хэшей используется для того, что бы браузер видел новые изменеия и вовремя их отображал, что бы имя bundle.js не было универсальным для всех версий
+    filename: filename("js"),
     path: path.resolve(__dirname, "dist"),
   },
   resolve: {
@@ -49,6 +45,7 @@ module.exports = {
   devServer: {
     port: 3000,
     hot: isDev,
+    watchContentBase: true,
   },
   plugins: [
     new CleanWebpackPlugin(),
@@ -59,26 +56,34 @@ module.exports = {
         collapseWhitespace: isProd,
       },
     }),
-    new CopyPlugin({
-      patterns: [
-        {
-          from: path.resolve(__dirname, "src/favicon.ico"),
-          to: path.resolve(__dirname, "dist"),
-        },
-      ],
-    }),
+    new CopyPlugin([
+      {
+        from: path.resolve(__dirname, "src/favicon.ico"),
+        to: path.resolve(__dirname, "dist"),
+      },
+    ]),
     new MiniCssExtractPlugin({
-      filename: setFilename("css"),
+      filename: filename("css"),
     }),
   ],
   module: {
     rules: [
       {
         test: /\.s[ac]ss$/i,
-        use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              hmr: isDev,
+              reloadAll: true,
+            },
+          },
+          "css-loader",
+          "sass-loader",
+        ],
       },
       {
-        test: /\.m?js$/,
+        test: /\.js$/,
         exclude: /node_modules/,
         use: jsLoaders(),
       },
