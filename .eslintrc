@@ -8,12 +8,22 @@
   "rules": {
     "quotes": ["error", "double"],
     "object-curly-spacing": ["error", "always"],
+    "operator-linebreak": "off",
+    "indent": "off",
+    "linebreak-style": 0,
     "max-len": [
       "error",
       {
         "code": 200
       }
-    ]
+    ],
+    "require-jsdoc": [2, {
+      "require": {
+          "FunctionDeclaration": false,
+          "MethodDefinition": false,
+          "ClassDeclaration": false
+      }
+  }]
   },
   "extends": ["eslint:recommended", "google"]
 }
