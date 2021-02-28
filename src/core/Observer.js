@@ -2,13 +2,14 @@ export class Observer {
   constructor() {
     this.listeners = {};
   }
+
   // Notify entities about changes
   emit(event, ...args) {
     if (!Array.isArray(this.listeners[event])) {
       return false;
     }
-    this.listeners[event].forEach((el) => el(...args));
 
+    this.listeners[event].forEach((el) => el(...args));
     return true;
   }
 
